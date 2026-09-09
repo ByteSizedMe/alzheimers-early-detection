@@ -1,0 +1,32 @@
+# Streamlit front end. Kept as a separate image so the API can scale
+# independently -- inference is the expensive half, the UI is not.
+FROM python:3.11-slim
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        libgl1 libglib2.0-0 curl \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install --no-cache-dir \
+        --extra-index-url https://download.pytorch.org/whl/cpu \
+        -r requirements.txt
+
+COPY src/ ./src/
+COPY configs/ ./configs/
+# The theme lives here; without it the container renders Streamlit's default light UI.
+COPY .streamlit/ ./.streamlit/
+
+ENV PYTHONPATH=/app/src \
+    PYTHONUNBUFFERED=1
+
+RUN useradd --create-home --uid 1000 appuser && chown -R appuser /app
+USER appuser
+
+EXPOSE 8501
+
+HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
+    CMD curl -fsS http://localhost:8501/_stcore/health || exit 1
+
+CMD ["streamlit", "run", "src/alzheimers/dashboard/app.py", \
+     "--server.port=8501", "--server.address=0.0.0.0", "--server.headless=true"]

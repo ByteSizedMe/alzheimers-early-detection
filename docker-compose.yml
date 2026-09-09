@@ -1,0 +1,36 @@
+# Local two-service stack: FastAPI inference + Streamlit dashboard.
+#   docker compose up --build
+#   API   http://localhost:8000/docs
+#   UI    http://localhost:8501
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: alzheimers-api:latest
+    ports:
+      - "8000:8000"
+    volumes:
+      # Checkpoints live outside the image so a retrain does not force a rebuild.
+      - ./artifacts:/app/artifacts:ro
+      - ./data:/app/data:ro
+    environment:
+      - PYTHONPATH=/app/src
+    restart: unless-stopped
+
+  dashboard:
+    build:
+      context: .
+      dockerfile: Dockerfile.dashboard
+    image: alzheimers-dashboard:latest
+    ports:
+      - "8501:8501"
+    environment:
+      # Service name, not localhost -- inside the compose network the API is
+      # reachable by its service name.
+      - ALZ_API_URL=http://api:8000
+    depends_on:
+      api:
+        condition: service_healthy
+    restart: unless-stopped

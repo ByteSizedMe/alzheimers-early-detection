@@ -1,0 +1,16 @@
+# Dark clinical theme. Fixed rather than following the OS so the stage colours
+# (green through red) keep the contrast they were chosen for.
+[theme]
+base = "dark"
+primaryColor = "#2AA0B5"
+backgroundColor = "#0E1621"
+secondaryBackgroundColor = "#16202C"
+textColor = "#E6EDF3"
+font = "sans serif"
+
+[server]
+headless = true
+maxUploadSize = 20
+
+[browser]
+gatherUsageStats = false

@@ -1,0 +1,76 @@
+# Default configuration for the Alzheimer's early-detection pipeline.
+# Every CLI entry point accepts --config to point at a different file.
+
+project_name: alzheimers-early-detection
+seed: 42
+
+classes: [NC, EMCI, LMCI, AD]
+
+paths:
+  raw_dir: data/raw                 # class-named subfolders of MRI slices
+  clinical_csv: data/raw/clinical.csv
+  processed_dir: data/processed
+  artifacts_dir: artifacts
+
+data:
+  image_size: 224                   # VGG19 expects 224x224
+  val_fraction: 0.15
+  test_fraction: 0.15
+  batch_size: 16
+  num_workers: 0                    # >0 needs the __main__ guard on Windows
+  # Augmentation is deliberately mild: MRI slices are already registered,
+  # and aggressive warping destroys the atrophy cues the model needs.
+  augment:
+    horizontal_flip: 0.5
+    rotation_degrees: 7
+    translate: 0.03
+    brightness: 0.10
+    contrast: 0.10
+
+imputation:
+  # Hot-deck: copy missing values from the most similar complete donor record.
+  donor_pool: class                 # "class" = stratify donors by label, "global" = ignore label
+  n_donors: 5                       # sample the donor from the k nearest complete records
+  scale: true
+
+balancing:
+  method: adasyn                    # adasyn | none
+  n_neighbors: 5
+  beta: 1.0                         # 1.0 = fully balance every minority class to the majority
+  # ADASYN runs on the tabular clinical features. Image-side imbalance is
+  # handled with class-weighted loss instead (see training.class_weights).
+
+model:
+  backbone: vgg19
+  pretrained: true
+  dropout: 0.5
+  # Unfreeze the last conv block so the model can adapt to MRI texture while
+  # keeping the early ImageNet edge/texture filters intact on a small dataset.
+  trainable_blocks: 1
+  hidden_dim: 512
+
+training:
+  epochs: 25
+  lr: 1.0e-4
+  head_lr_multiplier: 10.0          # the fresh head learns faster than the backbone
+  weight_decay: 1.0e-4
+  label_smoothing: 0.05
+  class_weights: balanced           # balanced | none
+  early_stopping_patience: 6
+  monitor: val_macro_f1
+  amp: true                         # mixed precision, ignored on CPU
+
+gradcam:
+  # The ReLU *after* the last conv, not the conv itself: Grad-CAM weights
+  # post-activation feature maps. Pointing at features.34 feeds it raw conv
+  # output that swings negative, and the CAM comes out uniformly zero.
+  target_layer: features.35
+  alpha: 0.45                       # heatmap opacity in the overlay
+
+api:
+  host: 0.0.0.0
+  port: 8000
+  checkpoint: artifacts/best_model.pt
+
+dashboard:
+  api_url: http://localhost:8000

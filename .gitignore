@@ -1,0 +1,31 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+
+# Generated data and model outputs are never committed.
+data/raw/
+data/processed/
+data/synthetic/
+artifacts/
+
+# Trained weights exceed GitHub's 100 MB file limit; they ship as a release
+# asset instead. See scripts/fetch_model.py.
+*.pt
+*.pth
+*.ckpt
+*.npz
+
+# ...but the labelled sample scans ARE committed, so a fresh clone can run the
+# interface immediately without regenerating a cohort first.
+!data/samples/
+!data/samples/**
+
+.env
+.DS_Store
+Thumbs.db

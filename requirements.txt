@@ -1,0 +1,26 @@
+# Core numerics
+numpy>=1.26
+pandas>=2.1
+scikit-learn>=1.4
+pyyaml>=6.0
+
+# Deep learning
+torch>=2.2
+torchvision>=0.17
+
+# Imaging / plots
+pillow>=10.2
+opencv-python>=4.9
+matplotlib>=3.8
+
+# Serving
+fastapi>=0.110
+uvicorn[standard]>=0.29
+python-multipart>=0.0.9
+
+# Dashboard
+streamlit>=1.33
+requests>=2.31
+
+# Tests
+pytest>=8.0
