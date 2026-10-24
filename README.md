@@ -210,7 +210,7 @@ NC scan  -> NC    conf 87.94%  | impairment  12.06%
 /explain -> central CAM mass 95.6%   (attention on tissue, not background)
 ```
 
-68 tests pass in ~34s.
+88 tests pass in ~50s.
 
 ---
 
@@ -258,6 +258,8 @@ reviewer nothing about the failure modes.
 | `GET /classes` | The four stages and their descriptions |
 | `POST /predict` | Multipart image upload → class probabilities |
 | `POST /explain` | Same, plus a base64 Grad-CAM overlay |
+| `POST /handwriting/analyze` | Timestamped spiral-drawing strokes → risk indicator, per-feature contributions, speed-coloured trace |
+| `GET /handwriting/demo/{profile}` | A simulated drawing (`typical`, `borderline`, `elevated`) the interface can replay |
 
 `/explain` takes an optional `target_class` so a reviewer can ask a
 counterfactual — *what would have made this AD?* — rather than only seeing
@@ -288,6 +290,45 @@ docker compose up --build
 Two images — API and dashboard — so inference scales independently of the UI.
 Checkpoints are mounted as a volume rather than baked in; a 550 MB layer that
 changes on every retrain defeats image caching.
+
+---
+
+## Handwriting modality (prototype)
+
+The deck's multimodal argument names handwriting as a second signal. The
+**Handwriting** tab in the interface adds it: the person draws a spiral from the
+centre outward, and the browser records every pen point with its timestamp.
+
+```bash
+uvicorn alzheimers.api.main:app --port 8000      # then open the Handwriting tab
+python -m alzheimers.handwriting.model            # retrain the handwriting model
+```
+
+**Pipeline.** [`handwriting/features.py`](src/alzheimers/handwriting/features.py)
+turns a trace into nine scale-free kinematic features: drawing time, mean pen
+speed, speed variability, stalled time, pen-up time, velocity peaks per unit
+path (fluency), 4–12 Hz tremor amplitude, spiral irregularity, and drawing size.
+[`handwriting/model.py`](src/alzheimers/handwriting/model.py) scores them with a
+regularised logistic regression. A linear model is the point: every prediction
+splits exactly into per-feature contributions (a test checks they reproduce the
+model's logit), which the interface shows as a diverging bar chart, next to the
+drawing recoloured by pen speed. It plays the role Grad-CAM plays for the MRI.
+
+**Demoing it.** Draw live with a mouse, finger or stylus, or press
+*Typical / Borderline / Elevated* to replay a simulated drawing in real time and
+score it. After an MRI has been analysed in the same session, the handwriting
+result also shows an illustrative combined view of the two indicators.
+
+**What this is not.** No handwriting dataset ships here, so the classifier is
+trained on drawings from [`handwriting/synthetic.py`](src/alzheimers/handwriting/synthetic.py).
+That simulator encodes the *direction* of changes reported in the handwriting
+literature (slower, more variable, more stalls and lifts, more tremor, a smaller
+and wobblier spiral), not their size, and gives every subject their own baseline
+so the classes overlap. The cross-validated accuracy (about 92%, AUC about 0.98)
+therefore describes the simulator and says nothing about patients. A live mouse
+drawing is also not a pen tablet: there is no pressure or in-air trajectory. To
+make this real, record a labelled cohort (or use DARWIN, Cilia et al. 2022),
+swap it in for `make_cohort`, and keep the feature code unchanged.
 
 ---
 
@@ -358,6 +399,10 @@ src/alzheimers/
 │   ├── train.py                  Phase 2 CLI
 │   ├── evaluate.py               Phase 3 CLI
 │   └── metrics.py                ordinal-aware metrics
+├── handwriting/
+│   ├── features.py               pen-trace kinematics
+│   ├── synthetic.py              spiral simulator (stand-in cohort)
+│   └── model.py                  logistic regression + explanations
 ├── api/
 │   ├── main.py                   FastAPI
 │   └── static/                   the review interface (HTML/CSS/JS, no build)
@@ -374,9 +419,12 @@ src/alzheimers/
   quoting any accuracy figure.
 - **2-D slices discard 3-D context.** A 3-D CNN over whole volumes captures
   atrophy patterns a single slice cannot; it also needs far more data.
-- **Single-modality.** The deck's multimodal argument (MRI + EEG + handwriting +
-  speech) is not implemented. `Predictor` is the seam where a fusion head would
-  attach, with the clinical branch consuming the already-built imputed table.
+- **Multimodal is partial.** MRI and handwriting are both implemented, but they
+  are separate models joined only by an illustrative equal-weight average in the
+  interface: no learned fusion, because no dataset pairs both signals for the same
+  subjects. EEG and speech from the deck are not implemented. `Predictor` is the
+  seam where a fusion head would attach.
+- **Handwriting is trained on simulated drawings.** See the handwriting section.
 - **Grad-CAM is coarse.** A 14×14 map upsampled to 224×224 localises to a lobe,
   not a structure. Guided Grad-CAM or attention rollout gives finer maps.
 - **No calibration.** Softmax confidence is not a probability a clinician should
