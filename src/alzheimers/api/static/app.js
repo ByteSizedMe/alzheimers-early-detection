@@ -145,6 +145,7 @@ async function analyse(file, targetClass = null) {
     }
     const result = await response.json();
     currentResult = result;
+    window.dispatchEvent(new CustomEvent("mri-result", { detail: result }));
     render(result, file);
   } catch (error) {
     el.loading.hidden = true;

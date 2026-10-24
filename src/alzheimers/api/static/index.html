@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="/static/app.css"/>
+<link rel="stylesheet" href="/static/handwriting.css"/>
 </head>
 <body>
 
@@ -33,6 +34,11 @@
       <span class="brand-text">Neuro<span class="brand-dim">/AD</span></span>
     </a>
 
+    <nav class="tabs" id="tabs" aria-label="Modality">
+      <button class="tab is-active" data-view="mri" type="button">MRI</button>
+      <button class="tab" data-view="hw" type="button">Handwriting</button>
+    </nav>
+
     <div class="nav-right">
       <div class="status" id="status">
         <span class="status-dot" id="status-dot"></span>
@@ -44,6 +50,8 @@
 </header>
 
 <main>
+
+<div id="view-mri">
 
   <!-- ------------------------------------------------------------- hero -->
   <section class="hero" id="hero">
@@ -197,6 +205,126 @@
     <button class="reset-btn" id="reset-btn">Analyse another scan</button>
   </section>
 
+</div><!-- /view-mri -->
+
+<div id="view-hw" hidden>
+
+  <section class="hw-hero">
+    <div class="eyebrow">
+      <span class="eyebrow-dot"></span>
+      Spiral drawing task · pen kinematics
+    </div>
+    <h1>
+      Draw a spiral.<br/>
+      <span class="grad">The motion tells the story.</span>
+    </h1>
+    <p class="lede">
+      Handwriting changes early in cognitive decline: slower, more hesitant pen
+      movement, more time with the pen lifted, a wobblier line. This captures a
+      drawing point by point, with timestamps, and shows which measurements moved
+      the score.
+    </p>
+  </section>
+
+  <section class="hw-stage" id="hw-stage">
+    <div class="hw-canvas-wrap">
+      <canvas id="hw-canvas" class="hw-canvas" aria-label="Drawing area"></canvas>
+      <div class="hw-hint" id="hw-hint">Start at the dot and draw a spiral outward — mouse, finger or stylus.</div>
+    </div>
+
+    <div class="hw-controls">
+      <div class="hw-actions">
+        <button class="hw-btn hw-primary" id="hw-analyse" type="button" disabled>Analyse drawing</button>
+        <button class="hw-btn" id="hw-clear" type="button">Clear</button>
+      </div>
+      <div class="hw-demos">
+        <span class="hw-demos-label">No time to draw? Replay a simulated drawing</span>
+        <div class="hw-demo-row">
+          <button class="hw-btn hw-demo" data-profile="typical" type="button">Typical</button>
+          <button class="hw-btn hw-demo" data-profile="borderline" type="button">Borderline</button>
+          <button class="hw-btn hw-demo" data-profile="elevated" type="button">Elevated</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="alert" id="hw-alert" hidden></div>
+
+  <section class="loading" id="hw-loading" hidden>
+    <div class="scanner">
+      <div class="scanner-ring"></div>
+      <div class="scanner-ring r2"></div>
+      <div class="scanner-core"></div>
+    </div>
+    <div class="loading-text">Measuring pen kinematics</div>
+  </section>
+
+  <section class="results" id="hw-results" hidden>
+    <div class="verdict reveal" id="hw-verdict" style="--d:0ms">
+      <div class="verdict-ring">
+        <svg viewBox="0 0 132 132" class="ring">
+          <circle class="ring-bg" cx="66" cy="66" r="56"/>
+          <circle class="ring-fg" id="hw-ring-fg" cx="66" cy="66" r="56"/>
+        </svg>
+        <div class="ring-label">
+          <div class="ring-value" id="hw-ring-value">0%</div>
+          <div class="ring-key">indicator</div>
+        </div>
+      </div>
+      <div class="verdict-body">
+        <div class="verdict-stage" id="hw-tier">—</div>
+        <div class="verdict-desc">Handwriting-based risk indicator</div>
+        <div class="verdict-file" id="hw-source"></div>
+      </div>
+      <div class="verdict-stats">
+        <div class="stat">
+          <div class="stat-value" id="hw-stat-time">—</div>
+          <div class="stat-key">Drawing time</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value" id="hw-stat-strokes">—</div>
+          <div class="stat-key">Strokes</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="panel reveal" style="--d:100ms">
+        <div class="panel-head"><h2>Pen speed along the drawing</h2></div>
+        <canvas id="hw-trace" class="hw-trace" aria-label="Drawing coloured by pen speed"></canvas>
+        <div class="hw-legend"><span>slow</span><span class="hw-ramp"></span><span>fast</span></div>
+        <p class="panel-note">
+          Where the line is slow it is coloured violet; fast stretches are cyan. Stalls,
+          stop-start motion and uneven pace show up as abrupt colour changes.
+        </p>
+      </div>
+
+      <div class="panel reveal" style="--d:170ms">
+        <div class="panel-head"><h2>What moved the score</h2></div>
+        <div class="hw-key"><span><i class="hw-dot up"></i>raises indicator</span><span><i class="hw-dot down"></i>lowers it</span></div>
+        <div class="hw-feats" id="hw-feats"></div>
+      </div>
+    </div>
+
+    <div class="panel reveal" id="hw-fusion" style="--d:240ms" hidden>
+      <div class="panel-head">
+        <h2>Multimodal view</h2>
+        <span class="chip" id="hw-fusion-chip"></span>
+      </div>
+      <div class="hw-fuse-grid" id="hw-fusion-grid"></div>
+      <p class="panel-note">
+        Illustrative equal-weight average of the MRI impairment probability and the
+        handwriting indicator. The weights are not learned; a real fusion head needs
+        paired data from the same subjects.
+      </p>
+    </div>
+
+    <p class="hw-disclaimer" id="hw-disclaimer"></p>
+    <button class="reset-btn" id="hw-reset" type="button">Draw another</button>
+  </section>
+
+</div><!-- /view-hw -->
+
 </main>
 
 <footer class="foot">
@@ -204,10 +332,11 @@
     <p><strong>Research prototype.</strong> Not a medical device and not for clinical
     use. Confidence is a raw model output, not a calibrated probability of disease.</p>
     <p class="foot-dim">VGG19 transfer learning · Grad-CAM (Selvaraju et al., 2017) ·
-    hot-deck imputation · ADASYN</p>
+    hot-deck imputation · ADASYN · pen-kinematics analysis</p>
   </div>
 </footer>
 
 <script src="/static/app.js"></script>
+<script src="/static/handwriting.js"></script>
 </body>
 </html>
