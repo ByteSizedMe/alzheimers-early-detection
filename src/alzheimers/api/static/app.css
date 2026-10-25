@@ -1,37 +1,85 @@
 /* ==========================================================================
    Neuro/AD — clinical review interface
 
-   Design intent: the scan is the subject, so the interface recedes. Near-black
-   ground with slow-moving light behind it, glass surfaces that let that light
-   through, and exactly one saturated accent (cyan→indigo) for chrome. The four
-   stage colours are reserved for diagnosis and appear nowhere else — a colour
-   that means "stage" never lands on a button or a border.
+   Theme: shadcn/ui preset b4wHkH84fq, decoded with the shadcn CLI's own preset
+   decoder:
+     style nova · theme + base colour mauve · radius small (0.45rem)
+     body Noto Sans · headings Playfair Display · icons Hugeicons
+     menus default-translucent · accent subtle · chart colour mauve
+   The mauve token values below are shadcn's published dark-mode values.
+
+   Design intent unchanged from the original: the scan is the subject, so the
+   chrome recedes. Mauve neutrals carry all of the interface; the four stage
+   colours are reserved for diagnosis and appear nowhere else.
    ========================================================================== */
 
+@font-face {
+  font-family: "Noto Sans"; font-style: normal; font-weight: 100 900; font-display: swap;
+  src: url("/static/fonts/noto-sans-latin-wght-normal.woff2") format("woff2-variations");
+}
+@font-face {
+  font-family: "Playfair Display"; font-style: normal; font-weight: 400 900; font-display: swap;
+  src: url("/static/fonts/playfair-display-latin-wght-normal.woff2") format("woff2-variations");
+}
+@font-face {
+  font-family: "JetBrains Mono"; font-style: normal; font-weight: 100 800; font-display: swap;
+  src: url("/static/fonts/jetbrains-mono-latin-wght-normal.woff2") format("woff2-variations");
+}
+
 :root {
-  --bg: #05070B;
-  --ink: #EEF3F8;
-  --muted: #7C8A9C;
-  --dim: #4E5B6B;
+  color-scheme: dark;
 
-  --glass: rgba(255, 255, 255, 0.028);
-  --glass-hi: rgba(255, 255, 255, 0.055);
-  --line: rgba(255, 255, 255, 0.075);
-  --line-hi: rgba(255, 255, 255, 0.14);
+  /* shadcn semantic tokens — mauve, dark */
+  --background: oklch(0.145 0.008 326);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.212 0.019 322.12);
+  --card-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0.005 325.62);
+  --primary-foreground: oklch(0.212 0.019 322.12);
+  --secondary: oklch(0.263 0.024 320.12);
+  --muted: oklch(0.263 0.024 320.12);
+  --muted-foreground: oklch(0.711 0.019 323.02);
+  --accent: oklch(0.263 0.024 320.12);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.542 0.034 322.5);
+  --chart-1: oklch(0.865 0.012 325.68);
+  --chart-2: oklch(0.542 0.034 322.5);
+  --chart-3: oklch(0.435 0.029 321.78);
+  --chart-4: oklch(0.364 0.029 323.89);
+  --chart-5: oklch(0.263 0.024 320.12);
+  --radius: 0.45rem;
 
-  --cyan: #22D3EE;
-  --indigo: #6366F1;
-  --violet: #A855F7;
+  /* names the rest of this file already uses, mapped onto the tokens above */
+  --bg: var(--background);
+  --ink: var(--foreground);
+  --muted: var(--muted-foreground);
+  --dim: oklch(0.6 0.028 322.5);
+
+  /* nova "default-translucent": cards let the moving background through */
+  --glass: oklch(0.212 0.019 322.12 / 0.62);
+  --glass-hi: oklch(0.263 0.024 320.12 / 0.78);
+  --line: var(--border);
+  --line-hi: var(--input);
+
+  /* accents collapse to the mauve primary ramp: no hue outside the stage colours */
+  --cyan: var(--primary);
+  --indigo: oklch(0.711 0.019 323.02);
+  --violet: oklch(0.542 0.034 322.5);
 
   --nc: #34D399;
   --emci: #FBBF24;
   --lmci: #FB923C;
   --ad: #F43F5E;
 
-  --r-sm: 10px;
-  --r: 16px;
-  --r-lg: 22px;
+  --r-sm: calc(var(--radius) - 3px);
+  --r: var(--radius);
+  --r-lg: calc(var(--radius) + 4px);
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --font-sans: "Noto Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-heading: "Playfair Display", ui-serif, Georgia, serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
 }
 
 * { box-sizing: border-box; }
@@ -46,61 +94,47 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--ink);
-  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family: var(--font-sans);
   font-size: 15px;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
 }
 
-h1, h2 { margin: 0; font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; }
+h1, h2 { margin: 0; font-family: var(--font-heading); font-weight: 600; letter-spacing: -0.01em; line-height: 1.1; }
 p { margin: 0; }
 button, select, input { font-family: inherit; }
 
 /* ------------------------------------------------------------- background */
-/* Three slow orbs and a faint grid. Motion is long-period and low-contrast so
-   it reads as depth rather than animation competing with the data. */
-.aurora { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
-
-.orb {
-  position: absolute; border-radius: 50%;
-  filter: blur(90px); opacity: 0.5;
+/* A looping grayscale clip (seam crossfaded, audio stripped) screened over the
+   mauve ground. The overlay tints it mauve and the vignette keeps the middle of
+   the page quiet enough to read; blur hides the clip's low resolution. */
+.bgfx {
+  position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none;
+  isolation: isolate; background: var(--background);
 }
-.orb-1 {
-  width: 620px; height: 620px; top: -240px; left: -140px;
-  background: radial-gradient(circle, rgba(34, 211, 238, 0.30), transparent 68%);
-  animation: drift1 26s ease-in-out infinite;
+.bgfx video {
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+  opacity: 0.78; filter: blur(2px) contrast(1.2) brightness(1.2);
 }
-.orb-2 {
-  width: 700px; height: 700px; top: -170px; right: -220px;
-  background: radial-gradient(circle, rgba(99, 102, 241, 0.30), transparent 68%);
-  animation: drift2 32s ease-in-out infinite;
+.bgfx::before {                       /* mauve tint: white smoke becomes mauve smoke */
+  content: ""; position: absolute; inset: 0; z-index: 1;
+  background: oklch(0.8 0.09 322); mix-blend-mode: multiply;
 }
-.orb-3 {
-  width: 540px; height: 540px; top: 46%; left: 34%;
-  background: radial-gradient(circle, rgba(168, 85, 247, 0.16), transparent 68%);
-  animation: drift3 38s ease-in-out infinite;
+.bgfx::after {                        /* vignette + top/bottom scrim for legibility */
+  content: ""; position: absolute; inset: 0; z-index: 2;
+  background:
+    radial-gradient(ellipse 62% 55% at 50% 38%, oklch(0.145 0.008 326 / 0.55) 0%, oklch(0.145 0.008 326 / 0.2) 60%, transparent 100%),
+    linear-gradient(to bottom, oklch(0.145 0.008 326 / 0.35), transparent 14%, transparent 78%, oklch(0.145 0.008 326 / 0.7));
 }
-.grid {
-  position: absolute; inset: 0;
-  background-image:
-    linear-gradient(rgba(255, 255, 255, 0.028) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.028) 1px, transparent 1px);
-  background-size: 64px 64px;
-  mask-image: radial-gradient(ellipse 90% 55% at 50% 0%, #000 30%, transparent 78%);
-  -webkit-mask-image: radial-gradient(ellipse 90% 55% at 50% 0%, #000 30%, transparent 78%);
-}
-
-@keyframes drift1 { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(90px, 60px); } }
-@keyframes drift2 { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(-80px, 80px); } }
-@keyframes drift3 { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(60px, -70px); } }
+@media (prefers-reduced-motion: reduce) { .bgfx video { display: none; } }
 
 /* -------------------------------------------------------------------- nav */
 .nav {
   position: sticky; top: 0; z-index: 50;
   backdrop-filter: blur(18px) saturate(150%);
   -webkit-backdrop-filter: blur(18px) saturate(150%);
-  background: rgba(5, 7, 11, 0.62);
+  background: oklch(0.145 0.008 326 / 0.6);
   border-bottom: 1px solid var(--line);
 }
 .nav-inner {
@@ -108,14 +142,14 @@ button, select, input { font-family: inherit; }
   height: 62px; display: flex; align-items: center; justify-content: space-between;
 }
 .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ink); }
-.brand-mark { width: 27px; height: 27px; }
-.brand-text { font-weight: 700; font-size: 15.5px; letter-spacing: -0.01em; }
+.brand-mark { width: 24px; height: 24px; color: var(--primary); }
+.brand-text { font-family: var(--font-heading); font-weight: 600; font-size: 18px; letter-spacing: -0.01em; }
 .brand-dim { color: var(--dim); font-weight: 500; }
 
 .nav-right { display: flex; align-items: center; gap: 18px; }
 .nav-link {
   color: var(--muted); text-decoration: none; font-size: 13px; font-weight: 500;
-  padding: 6px 12px; border-radius: 8px; border: 1px solid var(--line);
+  padding: 6px 12px; border-radius: var(--r); border: 1px solid var(--line);
   transition: color 0.2s, border-color 0.2s, background 0.2s;
 }
 .nav-link:hover { color: var(--ink); border-color: var(--line-hi); background: var(--glass); }
@@ -147,22 +181,24 @@ main { position: relative; z-index: 1; max-width: 1180px; margin: 0 auto; paddin
 .eyebrow {
   display: inline-flex; align-items: center; gap: 9px;
   font-size: 12px; font-weight: 500; letter-spacing: 0.045em;
-  color: var(--muted); padding: 6px 15px; border-radius: 999px;
-  background: var(--glass); border: 1px solid var(--line);
+  color: oklch(0.86 0.012 323); padding: 6px 15px; border-radius: 999px;
+  background: oklch(0.145 0.008 326 / 0.7); border: 1px solid var(--line);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
   margin-bottom: 26px;
 }
 .eyebrow-dot {
   width: 5px; height: 5px; border-radius: 50%;
-  background: linear-gradient(135deg, var(--cyan), var(--indigo));
+  background: var(--primary);
 }
 
-.hero h1 { font-size: clamp(2.3rem, 5.4vw, 3.65rem); font-weight: 800; letter-spacing: -0.035em; }
+.hero h1 { text-shadow: 0 2px 28px oklch(0.145 0.008 326 / 0.85); font-size: clamp(2.4rem, 5.6vw, 3.9rem); font-weight: 600; letter-spacing: -0.02em; line-height: 1.06; }
 .grad {
-  background: linear-gradient(100deg, var(--cyan) 0%, var(--indigo) 46%, var(--violet) 100%);
+  font-style: italic;
+  background: linear-gradient(100deg, var(--primary) 0%, oklch(0.84 0.03 323) 100%);
   -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
 }
 .lede {
-  color: var(--muted); font-size: 16px; line-height: 1.68;
+  color: oklch(0.96 0.005 323); text-shadow: 0 1px 18px oklch(0.145 0.008 326 / 0.9); font-size: 16px; line-height: 1.68;
   max-width: 640px; margin: 22px auto 42px;
 }
 
@@ -175,13 +211,13 @@ main { position: relative; z-index: 1; max-width: 1180px; margin: 0 auto; paddin
   padding: 52px 32px; cursor: pointer; overflow: hidden;
   transition: border-color 0.3s var(--ease), background 0.3s var(--ease), transform 0.3s var(--ease);
 }
-.dropzone:hover, .dropzone:focus-visible { border-color: rgba(34, 211, 238, 0.5); background: var(--glass-hi); transform: translateY(-2px); outline: none; }
-.dropzone.is-drag { border-color: var(--cyan); background: rgba(34, 211, 238, 0.07); transform: scale(1.012); }
+.dropzone:hover, .dropzone:focus-visible { border-color: oklch(0.922 0.005 325.62 / 0.5); background: var(--glass-hi); transform: translateY(-2px); outline: none; }
+.dropzone.is-drag { border-color: var(--cyan); background: oklch(0.922 0.005 325.62 / 0.08); transform: scale(1.012); }
 
 /* A wash of accent light that only blooms on hover — keeps the resting state calm. */
 .dz-glow {
   position: absolute; inset: -50%;
-  background: radial-gradient(circle at 50% 50%, rgba(34, 211, 238, 0.13), transparent 62%);
+  background: radial-gradient(circle at 50% 50%, oklch(0.922 0.005 325.62 / 0.1), transparent 62%);
   opacity: 0; transition: opacity 0.4s var(--ease); pointer-events: none;
 }
 .dropzone:hover .dz-glow, .dropzone.is-drag .dz-glow { opacity: 1; }
@@ -189,14 +225,14 @@ main { position: relative; z-index: 1; max-width: 1180px; margin: 0 auto; paddin
 .dz-content { position: relative; }
 .dz-icon {
   width: 50px; height: 50px; margin: 0 auto 18px;
-  display: grid; place-items: center; border-radius: 14px;
-  background: linear-gradient(140deg, rgba(34, 211, 238, 0.16), rgba(99, 102, 241, 0.16));
+  display: grid; place-items: center; border-radius: var(--r-lg);
+  background: linear-gradient(140deg, oklch(0.922 0.005 325.62 / 0.1), oklch(0.711 0.019 323.02 / 0.1));
   border: 1px solid var(--line-hi); color: var(--cyan);
   transition: transform 0.3s var(--ease);
 }
 .dropzone:hover .dz-icon { transform: translateY(-3px); }
-.dz-icon svg { width: 22px; height: 22px; }
-.dz-title { font-size: 17px; font-weight: 600; margin-bottom: 5px; }
+.dz-icon svg { width: 24px; height: 24px; }
+.dz-title { font-family: var(--font-heading); font-size: 20px; font-weight: 600; margin-bottom: 5px; }
 .dz-sub { font-size: 13.5px; color: var(--muted); }
 .dz-browse { color: var(--cyan); font-weight: 500; }
 
@@ -207,7 +243,7 @@ main { position: relative; z-index: 1; max-width: 1180px; margin: 0 auto; paddin
   gap: 14px; margin-bottom: 13px; flex-wrap: wrap;
 }
 .samples-label { font-size: 12.5px; color: var(--muted); }
-.samples-hint { font-size: 11.5px; color: var(--dim); font-family: "JetBrains Mono", monospace; }
+.samples-hint { font-size: 11.5px; color: var(--dim); font-family: var(--font-mono); }
 
 .samples-strip {
   display: flex; gap: 11px; overflow-x: auto; padding-bottom: 8px;
@@ -216,7 +252,7 @@ main { position: relative; z-index: 1; max-width: 1180px; margin: 0 auto; paddin
 }
 .sample {
   position: relative; width: 74px; flex-shrink: 0;
-  border-radius: 12px; overflow: hidden; cursor: pointer;
+  border-radius: var(--r); overflow: hidden; cursor: pointer;
   border: 1px solid var(--line); background: var(--glass);
   transition: transform 0.25s var(--ease), border-color 0.25s, box-shadow 0.25s;
 }
@@ -280,7 +316,7 @@ main { position: relative; z-index: 1; max-width: 1180px; margin: 0 auto; paddin
   display: flex; align-items: center; justify-content: space-between;
   gap: 14px; margin-bottom: 18px; flex-wrap: wrap;
 }
-.panel-head h2 { font-size: 13px; font-weight: 600; letter-spacing: 0.075em; text-transform: uppercase; color: var(--muted); }
+.panel-head h2 { font-size: 19px; font-weight: 600; letter-spacing: -0.005em; color: var(--ink); }
 .panel-note { font-size: 12.5px; color: var(--dim); margin-top: 14px; line-height: 1.55; }
 
 .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
@@ -317,13 +353,13 @@ main { position: relative; z-index: 1; max-width: 1180px; margin: 0 auto; paddin
 
 .verdict-body { flex: 1; min-width: 190px; position: relative; }
 .verdict-stage {
-  font-size: 46px; font-weight: 800; letter-spacing: -0.035em; line-height: 1;
+  font-family: var(--font-heading); font-size: 50px; font-weight: 700; letter-spacing: -0.02em; line-height: 1;
   color: var(--stage, var(--ink));
 }
 .verdict-desc { font-size: 17px; font-weight: 500; margin-top: 7px; }
 .verdict-file {
   font-size: 12px; color: var(--dim); margin-top: 9px;
-  font-family: "JetBrains Mono", monospace;
+  font-family: var(--font-mono);
 }
 
 .verdict-stats { display: flex; gap: 30px; position: relative; }
@@ -350,10 +386,10 @@ main { position: relative; z-index: 1; max-width: 1180px; margin: 0 auto; paddin
 .step-desc { font-size: 10.5px; color: var(--dim); margin-top: 2px; }
 
 /* -------------------------------------------------------------- compare */
-.seg { display: flex; gap: 3px; padding: 3px; border-radius: 10px; background: rgba(0, 0, 0, 0.3); border: 1px solid var(--line); }
+.seg { display: flex; gap: 3px; padding: 3px; border-radius: var(--r); background: oklch(0.145 0.008 326 / 0.6); border: 1px solid var(--line); }
 .seg-btn {
   border: 0; background: transparent; color: var(--muted); cursor: pointer;
-  font-size: 12px; font-weight: 500; padding: 5px 12px; border-radius: 7px;
+  font-size: 12px; font-weight: 500; padding: 5px 12px; border-radius: var(--r-sm);
   transition: background 0.22s, color 0.22s;
 }
 .seg-btn:hover { color: var(--ink); }
@@ -373,10 +409,10 @@ main { position: relative; z-index: 1; max-width: 1180px; margin: 0 auto; paddin
 .cmp-grip {
   position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
   width: 34px; height: 34px; border-radius: 50%;
-  background: rgba(255, 255, 255, 0.94); color: #0B1220;
+  background: rgba(255, 255, 255, 0.94); color: oklch(0.212 0.019 322.12);
   display: grid; place-items: center; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.55);
 }
-.cmp-grip svg { width: 16px; height: 16px; }
+.cmp-grip svg { width: 17px; height: 17px; }
 
 .cmp-tag {
   position: absolute; bottom: 12px; font-size: 10.5px; font-weight: 600;
@@ -418,20 +454,20 @@ main { position: relative; z-index: 1; max-width: 1180px; margin: 0 auto; paddin
 .explain-for { display: flex; align-items: center; gap: 8px; }
 .explain-for label { font-size: 12px; color: var(--dim); }
 #target-select {
-  background: rgba(0, 0, 0, 0.3); color: var(--ink); font-size: 12px;
-  border: 1px solid var(--line); border-radius: 8px; padding: 5px 9px; cursor: pointer;
+  background: oklch(1 0 0 / 0.05); color: var(--ink); font-size: 12px;
+  border: 1px solid var(--input); border-radius: var(--r); padding: 5px 9px; cursor: pointer;
 }
-#target-select:focus { outline: none; border-color: rgba(34, 211, 238, 0.5); }
+#target-select:focus { outline: none; border-color: var(--ring); box-shadow: 0 0 0 3px oklch(0.542 0.034 322.5 / 0.5); }
 
 /* ------------------------------------------------------------------ reset */
 .reset-btn {
   display: block; margin: 30px auto 0; padding: 11px 26px;
-  background: var(--glass); color: var(--ink); cursor: pointer;
-  border: 1px solid var(--line-hi); border-radius: 999px;
+  background: oklch(1 0 0 / 0.05); color: var(--ink); cursor: pointer;
+  border: 1px solid var(--input); border-radius: var(--r);
   font-size: 13.5px; font-weight: 500;
   transition: background 0.24s, border-color 0.24s, transform 0.24s var(--ease);
 }
-.reset-btn:hover { background: var(--glass-hi); border-color: rgba(34, 211, 238, 0.45); transform: translateY(-1px); }
+.reset-btn:hover { background: oklch(1 0 0 / 0.1); border-color: oklch(0.922 0.005 325.62 / 0.45); transform: translateY(-1px); }
 
 /* ----------------------------------------------------------------- footer */
 .foot { position: relative; z-index: 1; border-top: 1px solid var(--line); margin-top: 30px; }
@@ -459,3 +495,8 @@ main { position: relative; z-index: 1; max-width: 1180px; margin: 0 auto; paddin
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
 }
+
+
+/* shadcn focus treatment: 3px ring at half strength */
+:focus-visible { outline: none; box-shadow: 0 0 0 3px oklch(0.542 0.034 322.5 / 0.5); }
+.dropzone:focus-visible { border-color: var(--ring); }
