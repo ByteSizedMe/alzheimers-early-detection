@@ -61,7 +61,7 @@
     // Faint target spiral and a start dot: tells the person what to draw without
     // tracing a line they would follow slavishly.
     c.save();
-    c.strokeStyle = "rgba(255,255,255,0.07)";
+    c.strokeStyle = "rgba(255,255,255,0.1)";
     c.setLineDash([5, 7]);
     c.lineWidth = 1.5;
     c.beginPath();
@@ -74,7 +74,7 @@
     }
     c.stroke();
     c.setLineDash([]);
-    c.fillStyle = "rgba(34,211,238,0.9)";
+    c.fillStyle = "rgb(231, 228, 231)";
     c.beginPath(); c.arc(W / 2, H / 2, 5, 0, 2 * Math.PI); c.fill();
     c.restore();
   }
@@ -82,7 +82,7 @@
   function redraw() {
     ctx.clearRect(0, 0, W, H);
     drawGuide(ctx);
-    ctx.strokeStyle = "#EEF3F8";
+    ctx.strokeStyle = "#F4F2F4";
     ctx.lineWidth = 2.5;
     ctx.lineCap = ctx.lineJoin = "round";
     for (const s of strokes) {
@@ -119,7 +119,7 @@
       const last = current[current.length - 1];
       if (p.t <= last.t) continue;
       current.push(p);
-      ctx.strokeStyle = "#EEF3F8"; ctx.lineWidth = 2.5; ctx.lineCap = "round";
+      ctx.strokeStyle = "#F4F2F4"; ctx.lineWidth = 2.5; ctx.lineCap = "round";
       ctx.beginPath(); ctx.moveTo(last.x, last.y); ctx.lineTo(p.x, p.y); ctx.stroke();
     }
     el.hint.classList.add("is-hidden");
@@ -211,9 +211,10 @@
   /* ---------------------------------------------------------------- render */
 
   function lerp(a, b, t) { return a + (b - a) * t; }
-  /** slow violet -> indigo -> fast cyan */
+  /** slow dim mauve -> fast bright */
   function ramp(s) {
-    const stops = [[168, 85, 247], [99, 102, 241], [34, 211, 238]];
+    // mauve chart-3 -> muted-foreground -> near-white: dim is slow, bright is fast
+    const stops = [[89, 76, 91], [168, 158, 169], [250, 250, 250]];
     const k = Math.min(Math.max(s, 0), 1) * 2;
     const i = Math.min(Math.floor(k), 1), f = k - i;
     return `rgb(${stops[i].map((c, j) => Math.round(lerp(c, stops[i + 1][j], f))).join(",")})`;

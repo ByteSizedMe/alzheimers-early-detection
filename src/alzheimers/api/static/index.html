@@ -4,39 +4,30 @@
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>Neuro — Early Detection of Alzheimer's</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<link rel="preload" href="/static/fonts/noto-sans-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin/>
+<link rel="preload" href="/static/fonts/playfair-display-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin/>
 <link rel="stylesheet" href="/static/app.css"/>
 <link rel="stylesheet" href="/static/handwriting.css"/>
 </head>
 <body>
 
-<div class="aurora" aria-hidden="true">
-  <span class="orb orb-1"></span>
-  <span class="orb orb-2"></span>
-  <span class="orb orb-3"></span>
-  <span class="grid"></span>
+<div class="bgfx" aria-hidden="true">
+  <video autoplay muted loop playsinline preload="auto" poster="/static/bg-poster.jpg" disablepictureinpicture>
+    <source src="/static/bg.webm" type="video/webm"/>
+    <source src="/static/bg.mp4" type="video/mp4"/>
+  </video>
 </div>
 
 <header class="nav">
   <div class="nav-inner">
     <a class="brand" href="/">
-      <svg class="brand-mark" viewBox="0 0 32 32" fill="none" aria-hidden="true">
-        <path d="M16 4c-3 0-5.2 1.8-5.8 4.2C7.8 8.9 6 11 6 13.6c0 1.5.6 2.9 1.6 3.9-.6.8-1 1.8-1 2.9 0 2.6 2.2 4.8 5 4.8.7 1.6 2.4 2.8 4.4 2.8V4Z" stroke="url(#bg1)" stroke-width="1.6" stroke-linejoin="round"/>
-        <path d="M16 4c3 0 5.2 1.8 5.8 4.2 2.4.7 4.2 2.8 4.2 5.4 0 1.5-.6 2.9-1.6 3.9.6.8 1 1.8 1 2.9 0 2.6-2.2 4.8-5 4.8-.7 1.6-2.4 2.8-4.4 2.8V4Z" stroke="url(#bg2)" stroke-width="1.6" stroke-linejoin="round"/>
-        <circle cx="16" cy="16" r="2" fill="url(#bg2)"/>
-        <defs>
-          <linearGradient id="bg1" x1="6" y1="4" x2="16" y2="28"><stop stop-color="#22D3EE"/><stop offset="1" stop-color="#6366F1"/></linearGradient>
-          <linearGradient id="bg2" x1="16" y1="4" x2="26" y2="28"><stop stop-color="#6366F1"/><stop offset="1" stop-color="#A855F7"/></linearGradient>
-        </defs>
-      </svg>
+      <svg class="brand-mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16.998 7.12652C17.3182 7.04393 17.654 7 18 7C20.2091 7 22 8.79086 22 11C22 13.2091 20.2091 15 18 15C17.6451 15 17.3009 14.9538 16.9733 14.867M16.998 7.12652C16.9993 7.08451 17 7.04233 17 7C17 4.79086 15.2091 3 13 3C11.0824 3 9.47994 4.34939 9.09041 6.15043M16.998 7.12652C16.9769 7.80763 16.7854 8.44584 16.4649 9M16.9733 14.867C16.9909 14.7472 17 14.6247 17 14.5C17 13.2905 16.1411 12.2816 15 12.05M16.9733 14.867C16.7957 16.0737 15.756 17 14.5 17H14C11.7909 17 10 18.7909 10 21M9.09041 6.15043C8.74377 6.05243 8.37801 6 8 6C5.79086 6 4 7.79086 4 10C4 10.3886 4.05542 10.7643 4.15878 11.1195M9.09041 6.15043C10.1015 6.43625 10.9498 7.10965 11.4649 8M4.15878 11.1195C2.9114 11.4832 2 12.6352 2 14C2 15.6569 3.34315 17 5 17C6.30622 17 7.41746 16.1652 7.82929 15M4.15878 11.1195C4.24921 11.4303 4.37632 11.7255 4.53513 12"/><path d="M11.8361 11.7435C11.3257 12.2353 10.453 12.3202 9.70713 11.9008C8.9612 11.4814 8.58031 10.6917 8.73535 10"/></svg>
       <span class="brand-text">Neuro<span class="brand-dim">/AD</span></span>
     </a>
 
     <nav class="tabs" id="tabs" aria-label="Modality">
-      <button class="tab is-active" data-view="mri" type="button">MRI</button>
-      <button class="tab" data-view="hw" type="button">Handwriting</button>
+      <button class="tab is-active" data-view="mri" type="button"><svg class="tab-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16.998 7.12652C17.3182 7.04393 17.654 7 18 7C20.2091 7 22 8.79086 22 11C22 13.2091 20.2091 15 18 15C17.6451 15 17.3009 14.9538 16.9733 14.867M16.998 7.12652C16.9993 7.08451 17 7.04233 17 7C17 4.79086 15.2091 3 13 3C11.0824 3 9.47994 4.34939 9.09041 6.15043M16.998 7.12652C16.9769 7.80763 16.7854 8.44584 16.4649 9M16.9733 14.867C16.9909 14.7472 17 14.6247 17 14.5C17 13.2905 16.1411 12.2816 15 12.05M16.9733 14.867C16.7957 16.0737 15.756 17 14.5 17H14C11.7909 17 10 18.7909 10 21M9.09041 6.15043C8.74377 6.05243 8.37801 6 8 6C5.79086 6 4 7.79086 4 10C4 10.3886 4.05542 10.7643 4.15878 11.1195M9.09041 6.15043C10.1015 6.43625 10.9498 7.10965 11.4649 8M4.15878 11.1195C2.9114 11.4832 2 12.6352 2 14C2 15.6569 3.34315 17 5 17C6.30622 17 7.41746 16.1652 7.82929 15M4.15878 11.1195C4.24921 11.4303 4.37632 11.7255 4.53513 12"/><path d="M11.8361 11.7435C11.3257 12.2353 10.453 12.3202 9.70713 11.9008C8.9612 11.4814 8.58031 10.6917 8.73535 10"/></svg>MRI</button>
+      <button class="tab" data-view="hw" type="button"><svg class="tab-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M6.5 20.5L7.90613 15.227C8.19164 14.1564 8.33439 13.621 8.73856 13.3105C9.14274 13 9.69677 13 10.8048 13H13.1952C14.3032 13 14.8573 13 15.2614 13.3105C15.6656 13.621 15.8084 14.1564 16.0939 15.227L17.5 20.5"/><path d="M9.5 13L11.0769 9.36095C11.4701 8.45365 11.6667 8 12 8C12.3333 8 12.5299 8.45365 12.9231 9.36095L14.5 13"/></svg>Handwriting</button>
     </nav>
 
     <div class="nav-right">
@@ -75,11 +66,7 @@
       <div class="dz-glow"></div>
       <div class="dz-content">
         <div class="dz-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
-               stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-            <path d="M17 8l-5-5-5 5"/><path d="M12 3v13"/>
-          </svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.99994 17C2.99994 17.93 2.99994 18.395 3.10216 18.7765C3.37956 19.8117 4.18821 20.6204 5.22348 20.8978C5.60498 21 6.06997 21 6.99994 21L16.9999 21C17.9299 21 18.3949 21 18.7764 20.8978C19.8117 20.6204 20.6203 19.8117 20.8977 18.7765C20.9999 18.395 20.9999 17.93 20.9999 17"/><path d="M16.5 7.49993C16.5 7.49993 13.1858 2.99997 12 2.99996C10.8141 2.99995 7.50002 7.49996 7.50002 7.49996M12 3.99996V16"/></svg>
         </div>
         <div class="dz-title">Drop an MRI slice here</div>
         <div class="dz-sub">or <span class="dz-browse">browse your files</span> · PNG, JPEG, TIFF</div>
@@ -162,10 +149,7 @@
           <div class="cmp-handle" id="cmp-handle">
             <div class="cmp-line"></div>
             <div class="cmp-grip">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                   stroke-linecap="round" stroke-linejoin="round">
-                <path d="M15 18l-6-6 6-6"/><path d="M9 6l6 6-6 6"/>
-              </svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19.9999 17L3.99994 17"/><path d="M17 14C17 14 19.9999 16.2095 19.9999 17C19.9999 17.7906 16.9999 20 16.9999 20"/><path d="M4.99994 7L19.9999 7"/><path d="M6.99992 4C6.99992 4 3.99995 6.20947 3.99994 7.00002C3.99993 7.79058 6.99994 10 6.99994 10"/></svg>
             </div>
           </div>
           <div class="cmp-tag cmp-tag-l">MRI</div>
@@ -294,7 +278,7 @@
         <canvas id="hw-trace" class="hw-trace" aria-label="Drawing coloured by pen speed"></canvas>
         <div class="hw-legend"><span>slow</span><span class="hw-ramp"></span><span>fast</span></div>
         <p class="panel-note">
-          Where the line is slow it is coloured violet; fast stretches are cyan. Stalls,
+          Dim stretches of the line are slow; bright stretches are fast. Stalls,
           stop-start motion and uneven pace show up as abrupt colour changes.
         </p>
       </div>
