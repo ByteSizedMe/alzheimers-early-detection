@@ -60,23 +60,25 @@ para("How to use this document", bold=True, size=14, color="3B2A44", after=4)
 for t in [
     "Each script is written to be spoken, not read, and every presenter has the same length: about 115 words, roughly 50 seconds. Put it in your own words once you know it.",
     "Timing assumes about 140 words per minute. The same text is in the speaker notes of the matching slides.",
-    "Every script ends by handing over to the next person by name. Keep those hand-offs; they make the talk feel like one story.",
-    "Say the synthetic-data point in your own voice if you can: all data are synthetic, so the numbers describe the pipeline, not patients.",
-    "If you are asked something outside your part, name the teammate who covered it.",
+    "Slides carry no names. Find your part by the slide number (bottom-right of each slide) in the table above and the \"You present slides\" line on your page.",
+    "Every script ends by naming the next speaker. Keep those hand-offs.",
+    "Say the synthetic-data point in your own words: the numbers describe the pipeline, not patients.",
 ]:
     p = doc.add_paragraph(style="List Bullet"); p.add_run(t)
 
 for k, p in enumerate(PEOPLE, 1):
-    doc.add_page_break()
-    doc.add_paragraph(f"{k}. {p['name']}", style="Heading 1")
+    h = doc.add_paragraph(f"{k}. {p['name']}", style="Heading 1"); h.paragraph_format.page_break_before = True
     slides = list(range(p["slides"][0], p["slides"][1] + 1))
     shown = ([1] if p["key"] == "MS" else []) + slides
     w = sum(words(NOTES[str(s)]["text"]) for s in shown)
     secs = round(w / WPM * 60 / 5) * 5
-    para(f"{p['role']}   ·   slides {p['slides'][0]}–{p['slides'][1]}" + ("  (plus the opening on slide 1)" if p["key"] == "MS" else "") + f"   ·   {w} words, about {secs} seconds", italic=True, color="6B5A72", after=10)
-    for s in shown:
+    para(f"YOU PRESENT SLIDES {p['slides'][0]} AND {p['slides'][1]}", bold=True, size=13, color="5B3A6B", after=2)
+    para(f"{p['role']}" + ("  (plus the opening on slide 1)" if p["key"] == "MS" else "") + f"   ·   {w} words, about {secs} seconds", italic=True, color="6B5A72", after=10)
+    for idx, s in enumerate(shown):
         doc.add_paragraph(f"Slide {s}: {titles[s]}", style="Heading 2")
         para(NOTES[str(s)]["text"])
+        if idx < len(shown) - 1:
+            para(f"[ advance to slide {shown[idx + 1]} ]", italic=True, size=10, color="8A7A92", after=6)
     # cue box
     t = doc.add_table(rows=1, cols=1); t.style = "Table Grid"; c = t.rows[0].cells[0]; shade(c, "F1ECF4"); c.text = ""
     nxt = PEOPLE[k]["name"].split()[0] if k < len(PEOPLE) else "questions and the live demo"
@@ -84,16 +86,14 @@ for k, p in enumerate(PEOPLE, 1):
     c.paragraphs[0].add_run(f"finish by naming {nxt}." if k < len(PEOPLE) else "finish by inviting questions and offering the live demo.")
 
 # closing
-doc.add_page_break()
-doc.add_paragraph("Closing and live demo", style="Heading 1")
+h = doc.add_paragraph("Closing and live demo", style="Heading 1"); h.paragraph_format.page_break_before = True
 para("Slide 16   ·   Malhar leads, everyone answers questions   ·   about 0:15 plus Q&A", italic=True, color="6B5A72", after=10)
 doc.add_paragraph(f"Slide 16: {titles[16]}", style="Heading 2")
 para(NOTES["16"]["text"])
 para("Suggested live demo (about two minutes): upload the healthy sample and show the verdict; drag the attribution slider; ask the counterfactual by choosing AD under Explain; open the Handwriting tab, draw a spiral, press Analyse, and point at the speed trace and the feature bars. If the live drawing is awkward, press Elevated to replay a simulated drawing.", after=8)
 
 # footer note
-doc.add_page_break()
-doc.add_paragraph("Quick facts to have in your head", style="Heading 1")
+h = doc.add_paragraph("Quick facts to have in your head", style="Heading 1"); h.paragraph_format.page_break_before = True
 facts = [
     "All data are synthetic: MRI slices are generated phantoms, drawings are simulated. Results describe the pipeline, not patients.",
     "The released checkpoint reproduces the reported test split exactly: 95.35% accuracy, macro F1 0.9653, identical confusion matrix (43 slices).",

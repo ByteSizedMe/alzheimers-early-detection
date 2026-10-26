@@ -71,12 +71,8 @@ function card(slide, x, y, w, h, name, opts = {}) {
 }
 function T(slide, text, o) { slide.addText(text, Object.assign({ isTextBox: true, margin: 0, color: C.text1, fontSize: 14, valign: "top" }, o)); }
 function badge(slide, person, extra) {
-  slide.addShape(pres.shapes.OVAL, { x: L, y: 0.42, w: 0.4, h: 0.4, fill: { color: C.accent1 }, line: { color: C.accent1, width: 0 }, objectName: "Presenter badge" });
-  T(slide, person.initials, { x: L, y: 0.42, w: 0.4, h: 0.4, fontSize: 11, bold: true, color: C.background1, align: "center", valign: "middle", objectName: "Presenter initials" });
-  T(slide, [
-    { text: person.name.toUpperCase(), options: { bold: true, color: C.accent1, charSpacing: 2 } },
-    { text: "   ·   " + (extra || person.role), options: { color: C.text2 } },
-  ], { x: L + 0.55, y: 0.42, w: 10.5, h: 0.4, fontSize: 12, valign: "middle", objectName: "Presenter line" });
+  // topic label only: slides carry no presenter names (they are listed in the script document)
+  T(slide, (extra || person.role).toUpperCase(), { x: L, y: 0.42, w: 10.5, h: 0.4, fontSize: 12, bold: true, color: C.accent1, charSpacing: 3, valign: "middle", objectName: "Topic label" });
 }
 function framed(slide, img, x, y, w, h, name, alt) {
   card(slide, x - 0.08, y - 0.08, w + 0.16, h + 0.16, name + " frame", { transparency: 0, lineTransparency: 80 });
