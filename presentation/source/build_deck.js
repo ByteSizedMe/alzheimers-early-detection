@@ -126,31 +126,6 @@ const f1 = (x) => x.toFixed(3);
     s.addNotes(NOTES[1].text);
   }
 
-  // ---------------------------------------------------------------- 2 team
-  {
-    const s = pres.addSlide({ masterName: "CONTENT", sectionTitle: "Opening" });
-    T(s, "THE TEAM", { x: L, y: 0.42, w: 6, h: 0.4, fontSize: 12, bold: true, color: C.accent1, charSpacing: 3, valign: "middle", objectName: "Section label" });
-    s.addText("Who is presenting what", { placeholder: "title" });
-    const cw = 2.85, ch = 2.3, gx = 0.243, gy = 0.25, y0 = 2.0;
-    const cells = PEOPLE.map((p) => ({ n: p.initials, name: p.name, topic: p.role, sl: `Slides ${p.slides[0]}–${p.slides[1]}` }));
-    cells.push({ n: null, name: "Live demo and questions", topic: "Upload a scan, draw a spiral", sl: "Slide 17" });
-    cells.forEach((c, i) => {
-      const row = Math.floor(i / 4), col = i % 4, x = L + col * (cw + gx), y = y0 + row * (ch + gy);
-      card(s, x, y, cw, ch, "Team card " + (i + 1), c.n ? {} : { fill: C.accent1, transparency: 82, lineColor: HEX.orchid, lineTransparency: 55 });
-      if (c.n) {
-        s.addShape(pres.shapes.OVAL, { x: x + 0.25, y: y + 0.25, w: 0.62, h: 0.62, fill: { color: C.accent1 }, line: { color: C.accent1, width: 0 }, objectName: "Team dot " + c.n });
-        T(s, c.n, { x: x + 0.25, y: y + 0.25, w: 0.62, h: 0.62, fontSize: 16, bold: true, color: C.background1, align: "center", valign: "middle", objectName: "Team initials " + c.n });
-      } else {
-        s.addShape(pres.shapes.OVAL, { x: x + 0.25, y: y + 0.25, w: 0.62, h: 0.62, fill: { color: C.accent1 }, line: { color: C.accent1, width: 0 }, objectName: "Demo icon circle" });
-        s.addImage({ data: ico.eye, x: x + 0.40, y: y + 0.40, w: 0.32, h: 0.32, altText: "Eye icon for the live demo", objectName: "Demo icon" });
-      }
-      T(s, c.sl.toUpperCase(), { x: x + 1.0, y: y + 0.25, w: cw - 1.25, h: 0.62, fontSize: 11, bold: true, color: C.text2, charSpacing: 2, align: "right", valign: "middle", objectName: "Team slides " + (i + 1) });
-      T(s, c.name, { x: x + 0.25, y: y + 1.0, w: cw - 0.5, h: 0.6, fontSize: 16, bold: true, valign: "top", objectName: "Team name " + (i + 1) });
-      T(s, c.topic, { x: x + 0.25, y: y + 1.62, w: cw - 0.5, h: 0.6, fontSize: 14, color: C.text2, objectName: "Team topic " + (i + 1) });
-    });
-    s.addNotes(NOTES[2].text);
-  }
-
   // helper to open a person's section
   const openSection = (p) => pres.addSection({ title: p.name });
   const P = Object.fromEntries(PEOPLE.map((p) => [p.key, p]));
@@ -189,7 +164,7 @@ const f1 = (x) => x.toFixed(3);
       T(s, a[1], { x: x + 0.2, y: y + 0.85, w: 2.45, h: 0.3, fontSize: 15, bold: true, objectName: "Answer title " + (i + 1) });
       T(s, a[2], { x: x + 0.2, y: y + 1.15, w: 2.45, h: 0.35, fontSize: 13, color: C.text2, objectName: "Answer text " + (i + 1) });
     });
-    s.addNotes(NOTES[3].text);
+    s.addNotes(NOTES[2].text);
   }
 
   // ---------------------------------------------------------------- 4 Malhar: architecture
@@ -216,7 +191,7 @@ const f1 = (x) => x.toFixed(3);
     card(s, 7.17, 5.95, 5.56, 0.78, "Synthetic data note", { fill: C.accent4, transparency: 88, lineColor: HEX.emci, lineTransparency: 55 });
     s.addImage({ data: ico.warn, x: 7.4, y: 6.17, w: 0.34, h: 0.34, altText: "Warning icon", objectName: "Warning icon" });
     T(s, "All data are synthetic: scores describe the pipeline, not patients", { x: 7.9, y: 5.95, w: 4.7, h: 0.78, fontSize: 14, bold: true, valign: "middle", objectName: "Synthetic data text" });
-    s.addNotes(NOTES[4].text);
+    s.addNotes(NOTES[3].text);
   }
 
   // ---------------------------------------------------------------- 5 Sathwik: data
@@ -239,7 +214,7 @@ const f1 = (x) => x.toFixed(3);
       x: 7.3, y: 2.8, w: 5.3, h: 3.9, barDir: "col", chartColors: [HEX.nc, HEX.emci, HEX.lmci, HEX.ad], barGapWidthPct: 45, valAxisHidden: true, valGridLine: { style: "none" },
       dataLabelPosition: "outEnd", dataLabelFontSize: 16, catAxisLabelFontSize: 14, showTitle: false,
     }));
-    s.addNotes(NOTES[5].text);
+    s.addNotes(NOTES[4].text);
   }
 
   // ---------------------------------------------------------------- 6 Sathwik: imputation + ADASYN
@@ -258,7 +233,7 @@ const f1 = (x) => x.toFixed(3);
     const d = tab.adasyn_paired_vs_none["ADASYN (beta=1)"];
     T(s, [{ text: "ADASYN balances exactly ", options: { bold: true } }, { text: `(+${tab.adasyn_balance.synthetic_rows} synthetic rows, 3.26 → 1.00) ` }, { text: "but macro F1 moves ", options: {} }, { text: `${d.mean_delta_macro_f1.toFixed(3)} ± ${d.sd.toFixed(3)}`, options: { bold: true, color: C.accent1 } }, { text: `, ahead in ${d.wins} of ${d.n} splits: no measurable gain.` }], { x: 7.08, y: 5.2, w: 5.4, h: 1.45, fontSize: 14, objectName: "ADASYN takeaway" });
     T(s, "* Class mean uses the true label, so it is only a reference.", { x: L + 0.3, y: 6.5, w: 5.4, h: 0.25, fontSize: 10, color: C.text2, objectName: "Footnote" });
-    s.addNotes(NOTES[6].text);
+    s.addNotes(NOTES[5].text);
   }
 
   // ---------------------------------------------------------------- 7 Harit: model
@@ -283,7 +258,7 @@ const f1 = (x) => x.toFixed(3);
     s.addShape(pres.shapes.OVAL, { x: L + 0.3, y: 5.97, w: 0.5, h: 0.5, fill: { color: C.accent1 }, line: { color: C.accent1, width: 0 }, objectName: "ReLU note icon circle" });
     s.addImage({ data: ico.layers, x: L + 0.43, y: 6.1, w: 0.24, h: 0.24, altText: "Layers icon", objectName: "ReLU note icon" });
     T(s, [{ text: "A small detail that matters: ", options: { bold: true } }, { text: "in-place ReLUs are replaced with normal ones, because in-place layers overwrite the activations that Grad-CAM must read." }], { x: L + 1.05, y: 5.65, w: 10.8, h: 1.15, fontSize: 15, valign: "middle", objectName: "ReLU note text" });
-    s.addNotes(NOTES[7].text);
+    s.addNotes(NOTES[6].text);
   }
 
   // ---------------------------------------------------------------- 8 Harit: training
@@ -301,7 +276,7 @@ const f1 = (x) => x.toFixed(3);
     T(s, [{ text: "Validation is saturated. ", options: { bold: true } }, { text: "A perfect score at epoch 1 on 43 slices means model selection carried almost no information." }], { x: 8.2, y: 3.75, w: 4.35, h: 1.55, fontSize: 15, valign: "middle", objectName: "Saturated text" });
     card(s, 7.4, 5.6, 5.33, 1.2, "Not retrained note");
     T(s, [{ text: "We did not retrain. ", options: { bold: true, color: C.accent1 } }, { text: "Every result that follows comes from running the released checkpoint." }], { x: 7.7, y: 5.6, w: 4.8, h: 1.2, fontSize: 15, valign: "middle", objectName: "Not retrained text" });
-    s.addNotes(NOTES[8].text);
+    s.addNotes(NOTES[7].text);
   }
 
   // ---------------------------------------------------------------- 9 Shreya: headline results
@@ -321,7 +296,7 @@ const f1 = (x) => x.toFixed(3);
     card(s, 6.35, 1.95, 6.38, 4.85, "Accuracy chart card");
     s.addChart(pres.charts.BAR, [{ name: "Accuracy", labels: ["Reported split (n=43)", "Seed 101", "Seed 102", "Seed 103", "Pooled (n=1,065)"], values: [e1.accuracy, ps["101"].accuracy, ps["102"].accuracy, ps["103"].accuracy, pool.accuracy].map((v) => +v.toFixed(3)) }],
       chartStyle({ x: 6.5, y: 2.05, w: 6.08, h: 4.65, barDir: "col", chartColors: [HEX.dim, HEX.orchid, HEX.orchid, HEX.orchid, HEX.nc], barGapWidthPct: 40, showTitle: true, title: "Accuracy by test set", valAxisMinVal: 0, valAxisMaxVal: 1.2, valAxisHidden: true, valGridLine: { style: "none" }, dataLabelPosition: "outEnd", dataLabelFormatCode: "0.0%", dataLabelFontSize: 14, catAxisLabelFontSize: 11 }));
-    s.addNotes(NOTES[9].text);
+    s.addNotes(NOTES[8].text);
   }
 
   // ---------------------------------------------------------------- 10 Shreya: errors
@@ -345,7 +320,7 @@ const f1 = (x) => x.toFixed(3);
     bigStat(s, 7.3, 4.7, 1.72, 2.1, "0.992", "early-detection recall", C.accent1, "Stat early recall", 26);
     bigStat(s, 9.11, 4.7, 1.72, 2.1, "23", "errors, all adjacent", C.accent1, "Stat errors", 26);
     bigStat(s, 10.92, 4.7, 1.81, 2.1, "98.6 vs 91.8", "accuracy vs mean confidence (%)", C.accent1, "Stat calibration", 20);
-    s.addNotes(NOTES[10].text);
+    s.addNotes(NOTES[9].text);
   }
 
   // ---------------------------------------------------------------- 11 Taneesha: Grad-CAM
@@ -369,7 +344,7 @@ const f1 = (x) => x.toFixed(3);
     });
     const g = mri.e3_gradcam;
     bigStat(s, x0, 6.0, w0, 0.8, `0 of ${g.n} maps flagged`, "", C.accent1, "Audit stat", 18);
-    s.addNotes(NOTES[11].text);
+    s.addNotes(NOTES[10].text);
   }
 
   // ---------------------------------------------------------------- 12 Taneesha: robustness
@@ -387,7 +362,7 @@ const f1 = (x) => x.toFixed(3);
     bigStat(s, x0, 3.6, w0, 1.5, "≈ 0.89", "early-detection recall under brightness or contrast shifts: impaired read as normal", C.accent4, "Recall stat", 32);
     framed(s, SHOTS + "mri_misread_verdict.png", x0 + 0.08, 5.41, w0 - 0.16, (w0 - 0.16) * (388 / 2248), "Misread screenshot", "Screenshot: a true early-MCI slice predicted as normal cognition with 78 percent confidence");
     T(s, "A real miss from the prototype: true EMCI read as NC", { x: x0, y: 6.45, w: w0, h: 0.35, fontSize: 12, color: C.text2, objectName: "Misread caption" });
-    s.addNotes(NOTES[12].text);
+    s.addNotes(NOTES[11].text);
   }
 
   // ---------------------------------------------------------------- 13 Nithyashree: handwriting capture
@@ -409,7 +384,7 @@ const f1 = (x) => x.toFixed(3);
     });
     card(s, x0, 6.0, 5.68, 0.8, "Scale note");
     T(s, "Lengths are relative to the canvas diagonal, so screen size does not matter. A mouse or finger gives no pressure.", { x: x0 + 0.2, y: 6.0, w: 5.3, h: 0.8, fontSize: 13, valign: "middle", objectName: "Scale note text" });
-    s.addNotes(NOTES[13].text);
+    s.addNotes(NOTES[12].text);
   }
 
   // ---------------------------------------------------------------- 14 Nithyashree: classifier
@@ -428,7 +403,7 @@ const f1 = (x) => x.toFixed(3);
       chartStyle({ x: x0 + 0.1, y: 3.6, w: w0 - 0.2, h: 2.6, barDir: "col", chartColors: [HEX.orchid, HEX.orchid, HEX.orchid, HEX.orchid, HEX.ad], barGapWidthPct: 40, showTitle: true, title: "Accuracy as coordinate noise grows", titleFontSize: 14, valAxisMinVal: 0, valAxisMaxVal: 1.1, valAxisHidden: true, valGridLine: { style: "none" }, dataLabelPosition: "outEnd", dataLabelFormatCode: "0.0%", catAxisLabelFontSize: 12 }));
     card(s, x0, 6.4, w0, 0.45, "Caveat card", { fill: C.accent4, transparency: 88, lineColor: HEX.emci, lineTransparency: 55 });
     T(s, "Trained on simulated drawings: it learned our assumptions", { x: x0 + 0.15, y: 6.4, w: w0 - 0.3, h: 0.45, fontSize: 13, bold: true, valign: "middle", objectName: "Caveat text" });
-    s.addNotes(NOTES[14].text);
+    s.addNotes(NOTES[13].text);
   }
 
   // ---------------------------------------------------------------- 15 Arshi: performance
@@ -448,7 +423,7 @@ const f1 = (x) => x.toFixed(3);
     T(s, "The finished interface (real screenshot)", { x: 12.73 - iw + 0.08, y: 2.03 + (iw - 0.16) * (1800 / 2880) + 0.14, w: iw - 0.16, h: 0.3, fontSize: 12, color: C.text2, objectName: "Interface caption" });
     card(s, 12.73 - iw, 6.05, iw, 0.8, "Bottleneck note", { fill: C.accent4, transparency: 88, lineColor: HEX.emci, lineTransparency: 55 });
     T(s, [{ text: "Bottleneck: ", options: { bold: true } }, { text: "more clients do not add throughput; each request runs a blocking forward pass in one worker." }], { x: 12.73 - iw + 0.15, y: 6.05, w: iw - 0.3, h: 0.8, fontSize: 13, valign: "middle", objectName: "Bottleneck text" });
-    s.addNotes(NOTES[15].text);
+    s.addNotes(NOTES[14].text);
   }
 
   // ---------------------------------------------------------------- 16 Arshi: limits and next
@@ -472,7 +447,7 @@ const f1 = (x) => x.toFixed(3);
       T(s, String(i + 1), { x: 7.05, y: y + 0.08, w: 0.44, h: 0.44, fontSize: 14, bold: true, color: C.background1, align: "center", valign: "middle", objectName: "Next number " + (i + 1) });
       T(s, t, { x: 7.7, y, w: 4.85, h: 0.6, fontSize: 15, valign: "middle", objectName: "Next text " + (i + 1) });
     });
-    s.addNotes(NOTES[16].text);
+    s.addNotes(NOTES[15].text);
   }
 
   // ---------------------------------------------------------------- 17 closing
@@ -489,7 +464,7 @@ const f1 = (x) => x.toFixed(3);
     });
     T(s, "Research prototype · not a medical device · all data synthetic", { x: L, y: 6.75, w: 9, h: 0.3, fontSize: 12, color: C.text2, objectName: "Closing disclaimer" });
     T(s, "github.com/ByteSizedMe/alzheimers-early-detection", { x: L, y: 7.05, w: 9, h: 0.3, fontSize: 12, color: C.accent1, objectName: "Closing link" });
-    s.addNotes(NOTES[17].text);
+    s.addNotes(NOTES[16].text);
   }
 
   const out = "/tmp/claude-0/deck/Alzheimers_Presentation.pptx";

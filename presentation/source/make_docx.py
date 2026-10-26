@@ -45,11 +45,11 @@ tbl = doc.add_table(rows=1, cols=5); tbl.alignment = WD_TABLE_ALIGNMENT.CENTER; 
 for i, h in enumerate(["#", "Presenter", "Topic", "Slides", "About"]):
     c = tbl.rows[0].cells[i]; c.text = ""; r = c.paragraphs[0].add_run(h); r.bold = True; r.font.color.rgb = RGBColor(255, 255, 255); shade(c, "5B3A6B")
 for k, p in enumerate(PEOPLE, 1):
-    extra = (words(NOTES["1"]["text"]) + words(NOTES["2"]["text"])) if p["key"] == "MS" else 0
+    extra = words(NOTES["1"]["text"]) if p["key"] == "MS" else 0
     w = person_words(p) + extra
-    sl = f"{p['slides'][0]}–{p['slides'][1]}" + (" (+1, 2)" if p["key"] == "MS" else "")
+    sl = f"{p['slides'][0]}–{p['slides'][1]}" + (" (+1)" if p["key"] == "MS" else "")
     row = tbl.add_row().cells
-    for i, v in enumerate([str(k), p["name"], p["role"], sl, f"{round(w / WPM * 60 / 10) * 10 // 60}:{round(w / WPM * 60 / 10) * 10 % 60:02d} min"]):
+    for i, v in enumerate([str(k), p["name"], p["role"], sl, f"{w} words, about {round(w / WPM * 60 / 5) * 5} sec"]):
         row[i].text = v
         for pp in row[i].paragraphs:
             for r in pp.runs: r.font.size = Pt(11)
@@ -58,8 +58,8 @@ for k, p in enumerate(PEOPLE, 1):
 doc.add_paragraph()
 para("How to use this document", bold=True, size=14, color="3B2A44", after=4)
 for t in [
-    "Each script is written to be spoken, not read: short sentences, one idea at a time. Put it in your own words once you know it.",
-    "Timing assumes about 140 words per minute, so each person speaks for roughly two minutes. The same text is in the speaker notes of the matching slides.",
+    "Each script is written to be spoken, not read, and every presenter has the same length: about 115 words, roughly 50 seconds. Put it in your own words once you know it.",
+    "Timing assumes about 140 words per minute. The same text is in the speaker notes of the matching slides.",
     "Every script ends by handing over to the next person by name. Keep those hand-offs; they make the talk feel like one story.",
     "Say the synthetic-data point in your own voice if you can: all data are synthetic, so the numbers describe the pipeline, not patients.",
     "If you are asked something outside your part, name the teammate who covered it.",
@@ -70,10 +70,10 @@ for k, p in enumerate(PEOPLE, 1):
     doc.add_page_break()
     doc.add_paragraph(f"{k}. {p['name']}", style="Heading 1")
     slides = list(range(p["slides"][0], p["slides"][1] + 1))
-    shown = ([1, 2] if p["key"] == "MS" else []) + slides
+    shown = ([1] if p["key"] == "MS" else []) + slides
     w = sum(words(NOTES[str(s)]["text"]) for s in shown)
-    mins = w / WPM
-    para(f"{p['role']}   ·   slides {p['slides'][0]}–{p['slides'][1]}" + ("  (plus the opening on slides 1–2)" if p["key"] == "MS" else "") + f"   ·   about {mins:.1f} minutes ({w} words)", italic=True, color="6B5A72", after=10)
+    secs = round(w / WPM * 60 / 5) * 5
+    para(f"{p['role']}   ·   slides {p['slides'][0]}–{p['slides'][1]}" + ("  (plus the opening on slide 1)" if p["key"] == "MS" else "") + f"   ·   {w} words, about {secs} seconds", italic=True, color="6B5A72", after=10)
     for s in shown:
         doc.add_paragraph(f"Slide {s}: {titles[s]}", style="Heading 2")
         para(NOTES[str(s)]["text"])
@@ -86,9 +86,9 @@ for k, p in enumerate(PEOPLE, 1):
 # closing
 doc.add_page_break()
 doc.add_paragraph("Closing and live demo", style="Heading 1")
-para("Slide 17   ·   Malhar leads, everyone answers questions   ·   about 0:15 plus Q&A", italic=True, color="6B5A72", after=10)
-doc.add_paragraph(f"Slide 17: {titles[17]}", style="Heading 2")
-para(NOTES["17"]["text"])
+para("Slide 16   ·   Malhar leads, everyone answers questions   ·   about 0:15 plus Q&A", italic=True, color="6B5A72", after=10)
+doc.add_paragraph(f"Slide 16: {titles[16]}", style="Heading 2")
+para(NOTES["16"]["text"])
 para("Suggested live demo (about two minutes): upload the healthy sample and show the verdict; drag the attribution slider; ask the counterfactual by choosing AD under Explain; open the Handwriting tab, draw a spiral, press Analyse, and point at the speed trace and the feature bars. If the live drawing is awkward, press Elevated to replay a simulated drawing.", after=8)
 
 # footer note

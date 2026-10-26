@@ -1,6 +1,6 @@
 # Presentation
 
-- `Alzheimers_Presentation.pptx`: 17-slide deck (16:9). Speaker notes on every slide.
+- `Alzheimers_Presentation.pptx`: 16-slide deck (16:9). Speaker notes on every slide.
 - `Presentation_Scripts.docx`: printable script for each presenter, speaking order, hand-off cues, quick facts.
 - `source/`: scripts that generated them (`capture.js` takes the screenshots of the running prototype,
   `build_deck.js` builds the deck from the measured results in `report/benchmarks/results`, `content.js` holds the scripts).
