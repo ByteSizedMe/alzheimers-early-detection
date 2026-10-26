@@ -1,0 +1,176 @@
+{
+ "env": {
+  "cpu_count": 4,
+  "torch_threads": 4,
+  "torch": "2.14.1+cu130",
+  "python": "3.13.17",
+  "ram_gb": 15.7
+ },
+ "model_load_s": 1.7305470589999459,
+ "model": {
+  "checkpoint_mb": 132.023285,
+  "params_total": 33002308,
+  "params_trainable_as_loaded": 22417156,
+  "rss_after_load_mb": 138.0546875,
+  "rss_peak_after_explain_mb": 318.828125
+ },
+ "n_sample_images": 14,
+ "preprocess": {
+  "median_ms": 0.2848545000233571,
+  "mean_ms": 0.3188547999866387,
+  "p5_ms": 0.2302007999446687,
+  "p95_ms": 0.5297542499533846,
+  "n": 100
+ },
+ "predict": {
+  "median_ms": 111.27601550003874,
+  "mean_ms": 116.89684617999774,
+  "p5_ms": 93.65723969985993,
+  "p95_ms": 150.36227259987527,
+  "n": 100
+ },
+ "explain": {
+  "median_ms": 293.0287415000521,
+  "mean_ms": 290.1641206400018,
+  "p5_ms": 240.63242959994113,
+  "p95_ms": 343.96159895002256,
+  "n": 50
+ },
+ "batch_throughput": {
+  "1": {
+   "batch_ms": 110.02014025000335,
+   "images_per_s": 9.089244912137525
+  },
+  "4": {
+   "batch_ms": 461.26452800001516,
+   "images_per_s": 8.671813584589945
+  },
+  "16": {
+   "batch_ms": 2143.6781638333287,
+   "images_per_s": 7.463806960364225
+  }
+ },
+ "handwriting_model_load_s": 0.0017539440000291506,
+ "hw_simulate_one_drawing": {
+  "median_ms": 3.468839999868578,
+  "mean_ms": 3.485669780002354,
+  "p5_ms": 2.838761350119512,
+  "p95_ms": 4.154941550120839,
+  "n": 50
+ },
+ "hw_extract_features": {
+  "median_ms": 6.471895500112623,
+  "mean_ms": 6.754131400003871,
+  "p5_ms": 3.5874554999281827,
+  "p95_ms": 12.422464750034122,
+  "n": 200
+ },
+ "hw_analyze_total": {
+  "median_ms": 10.023208000006889,
+  "mean_ms": 10.218776794998803,
+  "p5_ms": 5.985652650065276,
+  "p95_ms": 16.502740150031055,
+  "n": 200
+ },
+ "hw_median_points": 981.5,
+ "hw_scale_1p7_max_rel_diff": {
+  "duration_s": 0.0,
+  "mean_speed": 9.786889970498388e-16,
+  "speed_cv": 2.4940528473606022e-15,
+  "pause_ratio": 0.0,
+  "in_air_ratio": 0.0,
+  "speed_peaks": 8.737073359813064e-16,
+  "tremor_amp": 6.819700213840124e-14,
+  "spiral_irregularity": 2.635849524626583e-15,
+  "size_norm": 2.344601553051693e-16
+ },
+ "server_cold_start_s": 11.564870274000214,
+ "http_payload_bytes": {
+  "mri_png": 32566,
+  "handwriting_json": 21902
+ },
+ "http": {
+  "health": {
+   "median_ms": 2.1686820000468288,
+   "mean_ms": 2.2347776200058433,
+   "p5_ms": 1.8291120000526462,
+   "p95_ms": 2.8296124999997114,
+   "n": 100
+  },
+  "predict": {
+   "median_ms": 123.13987499999257,
+   "mean_ms": 127.68208730000879,
+   "p5_ms": 99.43934824993903,
+   "p95_ms": 179.93507060000405,
+   "n": 50
+  },
+  "explain": {
+   "median_ms": 293.83293299997604,
+   "mean_ms": 308.75355406667495,
+   "p5_ms": 246.5085917500801,
+   "p95_ms": 390.19876445006497,
+   "n": 30
+  },
+  "handwriting": {
+   "median_ms": 11.827885499997137,
+   "mean_ms": 17.75454865998654,
+   "p5_ms": 9.939953950060954,
+   "p95_ms": 15.875073149902617,
+   "n": 50
+  }
+ },
+ "http_concurrency": {
+  "predict_1": {
+   "requests": 40,
+   "seconds": 4.251287626000021,
+   "req_per_s": 9.408914079435142
+  },
+  "predict_2": {
+   "requests": 40,
+   "seconds": 4.347336657000142,
+   "req_per_s": 9.20103575038097
+  },
+  "predict_4": {
+   "requests": 40,
+   "seconds": 4.272063974000048,
+   "req_per_s": 9.363155665140223
+  },
+  "explain_1": {
+   "requests": 24,
+   "seconds": 6.6414218110001,
+   "req_per_s": 3.613684039801404
+  },
+  "explain_2": {
+   "requests": 24,
+   "seconds": 7.360248077000051,
+   "req_per_s": 3.260759657680195
+  },
+  "explain_4": {
+   "requests": 24,
+   "seconds": 6.784252209999977,
+   "req_per_s": 3.5376043308979637
+  }
+ },
+ "server_rss_mb": 1182.84375,
+ "static_assets_kb": {
+  "app.css": 23.0,
+  "app.js": 15.3,
+  "bg-poster.jpg": 7.8,
+  "bg.mp4": 765.6,
+  "bg.webm": 709.6,
+  "fonts/jetbrains-mono-latin-wght-normal.woff2": 39.5,
+  "fonts/noto-sans-latin-wght-normal.woff2": 35.0,
+  "fonts/playfair-display-latin-wght-normal.woff2": 37.5,
+  "handwriting.css": 5.2,
+  "handwriting.js": 11.5,
+  "index.html": 15.5
+ },
+ "static_total_kb": 1665.4,
+ "static_without_video_kb": 182.4,
+ "loc_nonblank": {
+  "python_src": 2625,
+  "python_tests": 684,
+  "python_scripts": 1310,
+  "frontend_html_css_js": 1433
+ }
+}

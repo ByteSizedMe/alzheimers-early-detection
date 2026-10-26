@@ -1,0 +1,17 @@
+\begin{table}[t]
+\centering
+\caption{Handwriting Classifier on Simulated Drawings (Measured)}
+\label{tab:hw}
+\footnotesize
+\begin{tabular}{@{}p{3.55cm}cccc@{}}
+\toprule
+Model & Acc. & Sens. & Spec. & AUC \\
+\midrule
+Majority class & 0.500 & -- & -- & 0.500 \\
+Best single feature & -- & -- & -- & 0.939 \\
+Gradient boosting & 0.882 & -- & -- & 0.955 \\
+Logistic reg., 5-fold CV & 0.923 & 0.910 & 0.937 & 0.975 \\
+Logistic reg., held out & 0.893 & 0.890 & 0.897 & 0.962 \\
+\bottomrule
+\end{tabular}
+\end{table}

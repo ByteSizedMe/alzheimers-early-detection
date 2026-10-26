@@ -1,0 +1,23 @@
+\begin{table}[t]
+\centering
+\caption{Handwriting Robustness on 600 Held-Out Drawings (Measured; Model Fixed)}
+\label{tab:hwrobust}
+\footnotesize
+\begin{tabular}{@{}lcc@{}}
+\toprule
+Input degradation & Accuracy & AUC \\
+\midrule
+None (clean) & 0.893 & 0.962 \\
+Every 2nd sample kept & 0.892 & 0.961 \\
+Every 4th sample kept & 0.888 & 0.961 \\
+Position noise 0.5 px & 0.902 & 0.961 \\
+Position noise 1 px & 0.888 & 0.959 \\
+Position noise 2 px & 0.862 & 0.950 \\
+Position noise 4 px & 0.648 & 0.928 \\
+Timestamp jitter 2 ms & 0.890 & 0.961 \\
+Timestamp jitter 5 ms & 0.887 & 0.962 \\
+Drawing cut at 75\% & 0.883 & 0.960 \\
+Drawing cut at 50\% & 0.890 & 0.956 \\
+\bottomrule
+\end{tabular}
+\end{table}

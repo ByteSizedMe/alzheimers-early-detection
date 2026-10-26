@@ -1,0 +1,16 @@
+\begin{table}[t]
+\centering
+\caption{Downstream Effect of Balancing, 30 Splits (Measured; Mean $\pm$ SD)}
+\label{tab:adasyn}
+\footnotesize
+\begin{tabular}{@{}lccc@{}}
+\toprule
+Strategy & Macro F1 & AD recall & LMCI recall \\
+\midrule
+No resampling & 0.854 $\pm$ 0.021 & 0.888 & 0.683 \\
+Class-weighted loss & 0.854 $\pm$ 0.020 & 0.906 & 0.702 \\
+Random oversampling & 0.856 $\pm$ 0.020 & 0.905 & 0.706 \\
+ADASYN, $\beta=1$ & 0.852 $\pm$ 0.021 & 0.891 & 0.704 \\
+\bottomrule
+\end{tabular}
+\end{table}

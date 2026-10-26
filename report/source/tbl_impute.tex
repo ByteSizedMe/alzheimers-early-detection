@@ -1,0 +1,18 @@
+\begin{table}[t]
+\centering
+\caption{Imputation of Hidden Cells, 30 Repeats (Measured)}
+\label{tab:impute}
+\footnotesize
+\begin{tabular}{@{}lccc@{}}
+\toprule
+Method & nRMSE & Variance ratio & AD bias ($\mathrm{sd}$) \\
+\midrule
+Column mean & 1.000 & 0.00 & +1.47 \\
+Class mean (uses true label) & 0.649 & 0.57 & $-$0.05 \\
+KNN imputer, $k=5$ & 0.846 & 0.50 & +0.34 \\
+Hot$-$deck, $k=1$, class pool & 0.902 & 1.03 & $-$0.01 \\
+Hot$-$deck, $k=5$, class pool & 0.920 & 1.04 & $-$0.05 \\
+Hot$-$deck, $k=5$, global pool & 1.017 & 1.01 & +0.10 \\
+\bottomrule
+\end{tabular}
+\end{table}

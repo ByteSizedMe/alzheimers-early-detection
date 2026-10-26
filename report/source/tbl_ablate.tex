@@ -1,0 +1,21 @@
+\begin{table}[t]
+\centering
+\caption{Handwriting Features: Weight, Single-Feature AUC, and AUC Without the Feature (Measured)}
+\label{tab:ablate}
+\footnotesize
+\begin{tabular}{@{}lccc@{}}
+\toprule
+Feature & Weight & Alone & Dropped \\
+\midrule
+Tremor & +0.71 & 0.890 & 0.958 \\
+Spiral irregularity & +0.66 & 0.939 & 0.962 \\
+Speed variability & +0.63 & 0.890 & 0.960 \\
+Speed peaks & +0.49 & 0.905 & 0.960 \\
+Drawing time & +0.34 & 0.849 & 0.962 \\
+Drawing size & $-$0.26 & 0.779 & 0.960 \\
+Pen-up time & +0.22 & 0.765 & 0.961 \\
+Mean speed & $-$0.21 & 0.824 & 0.962 \\
+Stalled time & $-$0.15 & 0.597 & 0.960 \\
+\bottomrule
+\end{tabular}
+\end{table}

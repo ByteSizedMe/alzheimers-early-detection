@@ -1,0 +1,195 @@
+{
+ "train_wall_seconds": 5.652342081069946,
+ "cv_shipped_recipe": {
+  "n_samples": 600,
+  "cv_auc": 0.9754555555555556,
+  "cv_accuracy": 0.9233333333333333,
+  "cv_sensitivity": 0.91,
+  "cv_specificity": 0.9366666666666666,
+  "data": "simulated drawings; not patient data"
+ },
+ "n_train": 600,
+ "n_heldout": 600,
+ "h1_heldout": {
+  "accuracy": 0.8933333333333333,
+  "sensitivity": 0.89,
+  "specificity": 0.8966666666666666,
+  "auc": 0.9619333333333334,
+  "ci95": {
+   "accuracy": [
+    0.8683333333333333,
+    0.9183333333333333
+   ],
+   "sensitivity": [
+    0.8547840848274016,
+    0.925171657448026
+   ],
+   "specificity": [
+    0.8600649242365288,
+    0.9288025889967637
+   ],
+   "auc": [
+    0.9464758125472411,
+    0.9747540604820586
+   ]
+  }
+ },
+ "h5_tiers": {
+  "typical": {
+   "Low": 0.81,
+   "Moderate": 0.16,
+   "High": 0.03
+  },
+  "impaired": {
+   "Low": 0.06333333333333334,
+   "Moderate": 0.12,
+   "High": 0.8166666666666667
+  }
+ },
+ "h5_severity_spearman": 0.9692639752342384,
+ "h5_moderate_share_overall": 0.14,
+ "h2_baselines": {
+  "majority_class_accuracy": 0.5
+ },
+ "h2_single_feature_auc": {
+  "duration_s": 0.8492333333333333,
+  "mean_speed": 0.8242444444444444,
+  "speed_cv": 0.8899,
+  "pause_ratio": 0.5972333333333334,
+  "in_air_ratio": 0.7646000000000001,
+  "speed_peaks": 0.9053444444444445,
+  "tremor_amp": 0.8904333333333334,
+  "spiral_irregularity": 0.938988888888889,
+  "size_norm": 0.7785611111111111
+ },
+ "h2_gradient_boosting": {
+  "accuracy": 0.8816666666666667,
+  "auc": 0.9548666666666666
+ },
+ "h4_coefficients": {
+  "duration_s": 0.3352017602709191,
+  "mean_speed": -0.2078665800391977,
+  "speed_cv": 0.6266429809515086,
+  "pause_ratio": -0.15297753947337606,
+  "in_air_ratio": 0.218622115712403,
+  "speed_peaks": 0.49151093010826147,
+  "tremor_amp": 0.7125789898148484,
+  "spiral_irregularity": 0.6558205915356747,
+  "size_norm": -0.2644098932841646
+ },
+ "h3_drop_one": {
+  "duration_s": {
+   "auc": 0.962411111111111,
+   "accuracy": 0.8933333333333333
+  },
+  "mean_speed": {
+   "auc": 0.9622333333333333,
+   "accuracy": 0.895
+  },
+  "speed_cv": {
+   "auc": 0.9595888888888889,
+   "accuracy": 0.8866666666666667
+  },
+  "pause_ratio": {
+   "auc": 0.9604555555555555,
+   "accuracy": 0.8933333333333333
+  },
+  "in_air_ratio": {
+   "auc": 0.9611444444444445,
+   "accuracy": 0.8933333333333333
+  },
+  "speed_peaks": {
+   "auc": 0.9604111111111111,
+   "accuracy": 0.8933333333333333
+  },
+  "tremor_amp": {
+   "auc": 0.9583888888888888,
+   "accuracy": 0.88
+  },
+  "spiral_irregularity": {
+   "auc": 0.9617666666666667,
+   "accuracy": 0.895
+  },
+  "size_norm": {
+   "auc": 0.960188888888889,
+   "accuracy": 0.8916666666666667
+  }
+ },
+ "h6_robustness": {
+  "clean": {
+   "accuracy": 0.8933333333333333,
+   "auc": 0.9619333333333334,
+   "rejected": 0
+  },
+  "subsample_x2": {
+   "accuracy": 0.8916666666666667,
+   "auc": 0.9611555555555555,
+   "rejected": 0
+  },
+  "subsample_x4": {
+   "accuracy": 0.8883333333333333,
+   "auc": 0.9607222222222223,
+   "rejected": 0
+  },
+  "position_noise_0.5px": {
+   "accuracy": 0.9016666666666666,
+   "auc": 0.9613555555555556,
+   "rejected": 0
+  },
+  "position_noise_1.0px": {
+   "accuracy": 0.8883333333333333,
+   "auc": 0.9593333333333333,
+   "rejected": 0
+  },
+  "position_noise_2.0px": {
+   "accuracy": 0.8616666666666667,
+   "auc": 0.9497777777777777,
+   "rejected": 0
+  },
+  "position_noise_4.0px": {
+   "accuracy": 0.6483333333333333,
+   "auc": 0.9282777777777779,
+   "rejected": 0
+  },
+  "timestamp_jitter_2ms": {
+   "accuracy": 0.89,
+   "auc": 0.9613,
+   "rejected": 0
+  },
+  "timestamp_jitter_5ms": {
+   "accuracy": 0.8866666666666667,
+   "auc": 0.9620000000000001,
+   "rejected": 0
+  },
+  "truncated_50pct": {
+   "accuracy": 0.89,
+   "auc": 0.9561999999999999,
+   "rejected": 0
+  },
+  "truncated_75pct": {
+   "accuracy": 0.8833333333333333,
+   "auc": 0.9601555555555557,
+   "rejected": 0
+  }
+ },
+ "h6_scale_invariance_max_relative_diff": {
+  "duration_s": 0.0,
+  "mean_speed": 0.0,
+  "speed_cv": 0.0,
+  "pause_ratio": 0.0,
+  "in_air_ratio": 0.0,
+  "speed_peaks": 0.0,
+  "tremor_amp": 0.0,
+  "spiral_irregularity": 0.0,
+  "size_norm": 0.0
+ },
+ "drawing_stats": {
+  "points_median": 892.0,
+  "points_p5_p95": [
+   450.0,
+   1729.199999999998
+  ],
+  "duration_s_median": 10.469633736623186,
+  "strokes_median": 1.0
+ }
+}

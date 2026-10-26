@@ -1,0 +1,22 @@
+\begin{table}[t]
+\centering
+\caption{Latency on \CpuCount{} CPU Cores, Idle Machine (Measured; Milliseconds)}
+\label{tab:latency}
+\footnotesize
+\begin{tabular}{@{}lccc@{}}
+\toprule
+Operation & Median & 5th--95th pct. & $n$ \\
+\midrule
+Preprocessing (resize, normalize) & 0.28 & 0.23--0.53 & 100 \\
+\texttt{predict()} & 111 & 93.7--150 & 100 \\
+\texttt{explain()} (Grad-CAM) & 293 & 241--344 & 50 \\
+HTTP \texttt{/health} & 2.17 & 1.83--2.83 & 100 \\
+HTTP \texttt{/predict} & 123 & 99.4--180 & 50 \\
+HTTP \texttt{/explain} & 294 & 247--390 & 30 \\
+Handwriting: extract features & 6.47 & 3.59--12.4 & 200 \\
+Handwriting: features + score & 10.0 & 5.99--16.5 & 200 \\
+HTTP \texttt{/handwriting/analyze} & 11.8 & 9.94--15.9 & 50 \\
+Simulate one drawing & 3.47 & 2.84--4.15 & 50 \\
+\bottomrule
+\end{tabular}
+\end{table}

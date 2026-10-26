@@ -1,0 +1,21 @@
+\begin{table}[t]
+\centering
+\caption{Size, Memory, and Throughput (Measured)}
+\label{tab:resources}
+\footnotesize
+\begin{tabular}{@{}p{4.6cm}r@{}}
+\toprule
+Quantity & Value \\
+\midrule
+Checkpoint file & 132 MB \\
+Parameters, total & 33.0 M \\
+Model load time & 1.7 s \\
+Server cold start to ready & 11.6 s \\
+Server process resident memory after the benchmark & 1,183 MiB \\
+Forward throughput, batch 1 & 9.1 img/s \\
+Forward throughput, batch 16 & 7.5 img/s \\
+\texttt{/predict} throughput, 1 / 2 / 4 clients & 9.4 / 9.2 / 9.4 req/s \\
+\texttt{/explain} throughput, 1 / 2 / 4 clients & 3.61 / 3.26 / 3.54 req/s \\
+\bottomrule
+\end{tabular}
+\end{table}

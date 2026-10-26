@@ -1,0 +1,22 @@
+\begin{table}[t]
+\centering
+\caption{Image Classifier Metrics (Measured, Released Checkpoint)}
+\label{tab:mri}
+\footnotesize
+\begin{tabular}{@{}lcc@{}}
+\toprule
+Metric & Reported split & Fresh cohorts, pooled [95\% CI] \\
+\midrule
+Accuracy & 0.953 & 0.978 [0.969, 0.987] \\
+Balanced accuracy & 0.965 & 0.979 [0.971, 0.987] \\
+Macro F1 & 0.965 & 0.978 [0.968, 0.986] \\
+Quadratic kappa & 0.978 & 0.990 [0.986, 0.994] \\
+Early-detection recall & 0.960 & 0.992 [0.984, 0.998] \\
+Macro AUC (one-vs-rest) & 0.995 & 0.998 \\
+ECE (15 bins) & 0.104 & 0.060 \\
+NLL & 0.169 & 0.122 \\
+Brier score & 0.084 & 0.051 \\
+Slices & 43 & 1,065 \\
+\bottomrule
+\end{tabular}
+\end{table}

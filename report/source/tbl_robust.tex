@@ -1,0 +1,22 @@
+\begin{table}[t]
+\centering
+\caption{Image Robustness on the Seed-101 Cohort (Measured; 355 Slices)}
+\label{tab:robust}
+\footnotesize
+\begin{tabular}{@{}lccc@{}}
+\toprule
+Perturbation & Macro F1 & Accuracy & Early recall \\
+\midrule
+None (clean) & 0.987 & 0.986 & 0.995 \\
+Gaussian noise, $\sigma=0.05$ & 0.919 & 0.918 & 1.000 \\
+Gaussian noise, $\sigma=0.10$ & 0.648 & 0.665 & 1.000 \\
+Gaussian noise, $\sigma=0.20$ & 0.443 & 0.417 & 1.000 \\
+Gaussian blur, $\sigma=2$ px & 0.822 & 0.842 & 0.976 \\
+JPEG, quality 30 & 0.807 & 0.831 & 0.922 \\
+Brightness $+0.2$ & 0.942 & 0.932 & 0.888 \\
+Contrast $\times0.6$ & 0.947 & 0.938 & 0.898 \\
+Rotation $10^\circ$ & 0.965 & 0.969 & 0.980 \\
+Shift 20 px & 0.968 & 0.969 & 0.995 \\
+\bottomrule
+\end{tabular}
+\end{table}
