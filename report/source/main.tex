@@ -16,9 +16,10 @@
 
 \title{Early Detection of Alzheimer's Disease from MRI and Handwriting: Design and Analysis of an Explainable Multimodal Prototype}
 
-\author{Sathwik Hejamady Bhat, Malhar Srivatsav,\\
-Harit Raval, Parthav Udayasankar,\\
-Kushith Reddy}
+\author{Malhar Srivatsav, Sathwik Hejamady Bhat,\\
+Harit Raval, Shreya Jain,\\
+Taneesha Rajiv Prasad, Nithyashree Hebbar,\\
+Arshi Garg}
 
 \maketitle
 
@@ -31,7 +32,7 @@ Alzheimer's disease, MRI classification, Grad-CAM, transfer learning, handwritin
 \end{IEEEkeywords}
 
 \section{Introduction}
-Alzheimer's disease advances through recognizable stages, from normal cognition through early and late mild cognitive impairment to dementia, and the Alzheimer's Disease Neuroimaging Initiative organizes its data around that progression \cite{adni}. Structural MRI shows the change as enlarged ventricles, thinner cortex, and a shrinking hippocampus, but early differences are subtle, and a network that reports only a label gives a reviewer nothing to check. The project examined here, whose source repository is \cite{repo}, pairs a stage classifier with an attribution map that shows where the evidence lies and adds handwriting as a second, inexpensive signal.
+This report documents and evaluates the explainable early-detection prototype in \cite{repo}. Alzheimer's disease advances through recognizable stages, from normal cognition through early and late mild cognitive impairment to dementia, and the Alzheimer's Disease Neuroimaging Initiative organizes its data around that progression \cite{adni}. Structural MRI shows the change as enlarged ventricles, thinner cortex, and a shrinking hippocampus, but early differences are subtle, and a network that reports only a label gives a reviewer nothing to check. The prototype pairs a stage classifier with an attribution map that shows where the evidence lies and adds handwriting as a second, inexpensive signal.
 
 The central requirement is that every reported number stay attributable to what it measures. The repository contains no ADNI images or handwriting recordings: its MRI slices are phantoms drawn by a generator and its drawings come from a simulator. A high score on such data shows that the pipeline is connected correctly and that the generator is separable, not that the model detects disease. This report therefore separates measurements produced by executing the repository, quantities derived from code and constants, and claims it does not make.
 
